@@ -16,9 +16,10 @@
     long use re.sub to perform the substitution
 """
 import re
+from typing import List
 
 
-def filter_dataum(fields, redaction, message, separator):
+def filter_dataum(fields: List[str], redaction: str, message: str, separator: str) -> str:
     """
         returns the log message obfuscated
     """
