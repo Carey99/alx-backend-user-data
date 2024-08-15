@@ -5,8 +5,9 @@
     hasheddd with bcrypt
 """
 import bcrypt
-from db import DB, NoResultFound
+from db import DB
 from user import User
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class Auth:
