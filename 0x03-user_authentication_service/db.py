@@ -30,13 +30,9 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> None:
-        """Add a new user to the database
-        """
-
-        hashed_password = bcrypt.hashpw(hashed_password.encode(),
-                                        bcrypt.gensalt())
-        new_user = User(email=email, hashed_password=hashed_password)
-        self._session.add(new_user)
+    def add_user(self, email: str, hashed_password: str) -> User:
+        """Add a new user to the database"""
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
         self._session.commit()
-        self._session.close()
+        return user
