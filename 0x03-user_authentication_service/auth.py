@@ -28,4 +28,5 @@ class Auth:
             if exists:
                 raise ValueError(f"User {email} already exists")
         except Exception:
-            return self._db.add_user(email, self._hash_password(password))
+            return self._db.add_user(email=email,
+                                     password=self._hash_password(password))
