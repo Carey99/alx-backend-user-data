@@ -1,13 +1,6 @@
-#!/usr/bin/env python3
-"""
-    takes a passwoord strinng and returns bytes
-    the returned byte a salted hhashh of tthe input
-    hasheddd with bcrypt
-"""
-import bcrypt
 from db import DB
 from user import User
-from sqlalchemy.orm.exc import NoResultFound
+import bcrypt
 
 
 class Auth:
@@ -22,12 +15,17 @@ class Auth:
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
     def register_user(self, email: str, password: str) -> User:
-        """register a new user"""
+        """Register a new user with email and password"""
         try:
-            exists = self._db.find_user_by(email=email)
-            if exists:
+            # Check if user already exists
+            existing_user = self._db.find_user_by(email=email)
+            if existing_user:
                 raise ValueError(f"User {email} already exists")
         except Exception:
-            password = self._hash_password(password)
-            return self._db.add_user(email=email,
-                                     hashed_password=password)
+            # If user does not exist, proceed to create a new user
+            hashed_password = self._hash_password(password)
+            new_user = self._db.add_user(email=email,
+                                         hashed_password=hashed_password)
+            return new_user
+        # If user already exists, raise a ValueError
+        raise ValueError(f"User {email} already exists")
