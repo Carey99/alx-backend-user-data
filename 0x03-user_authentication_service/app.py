@@ -52,7 +52,7 @@ def login() -> str:
 def logout() -> str:
     """DELETE /sessions
     Return:
-        - Redirects to home route.
+        - The account logout payload.
     """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
