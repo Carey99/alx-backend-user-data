@@ -48,4 +48,3 @@ class DB:
             raise NoResultFound
         except InvalidRequestError:
             raise InvalidRequestError
-            
