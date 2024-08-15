@@ -4,7 +4,7 @@
     returns a jsonify iin the format
     {"status": "OK"}
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort, request
 from auth import Auth
 
 
@@ -31,6 +31,27 @@ def register_user() -> str:
         return jsonify({"email": user.email, "message": "user created"})
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def login() -> str:
+    """
+        login a user
+    """
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    if not email or not password:
+        abort(401)
+
+    try:
+        user = AUTH.authenticate(email, password)
+        session_id = AUTH.create_session(user.email)
+        response = jsonify({"email": user.email, "message": "logged in"})
+        response.set_cookie("session_id", session_id)
+        return response
+    except ValueError:
+        abort(401)
 
 
 if __name__ == "__main__":
